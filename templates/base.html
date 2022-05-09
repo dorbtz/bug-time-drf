@@ -1,0 +1,130 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Base html</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+
+
+
+    <!-- Demo Styles -->
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header class="header">
+            <figure class="logo"><a href="/"><img src="{% static 'img/buglogo.png' %}" alt="Logo"></a></figure>
+            <nav class="menu">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a>Genres</a>
+                        <ul>
+                            <li><a href="{% url 'movies:movie_category' 'action' %}">Action</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'adventure' %}">Adventure</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'animated' %}">Animated</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'comedy' %}">Comedy</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'crime' %}">Crime</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'drama' %}">Drama</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'fantasy' %}">Fantasy</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'horror' %}">Horror</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'historical' %}">Historical</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'romance' %}">Romance</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'western' %}">Western</a></li>
+                            <li><a href="{% url 'movies:movie_category' 'science-fiction' %}">Science-fiction</a></li>
+                        </ul>
+                    </li>
+                    <li><a>Year</a>
+                        <ul>
+                            <li><a href="{% url 'movies:movie_year' '2022' %} ">2022</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2021' %} ">2021</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2020' %}">2020</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2019' %}">2019</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2018' %}">2018</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2017' %}">2017</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2016' %}">2016</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2015' %}">2015</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2014' %}">2014</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2013' %}">2013</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2012' %}">2012</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2011' %}">2011</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2010' %}">2010</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2009' %}">2009</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2008' %}">2008</a></li>
+                            <li><a href="{% url 'movies:movie_year' '2007' %}">2007</a></li>
+                        </ul>
+                    </li>
+                    <li><a>Language</a>
+                        <ul>
+                            <li><a href="{% url 'movies:movie_language' 'english' %}">English</a></li>
+                            <li><a href="{% url 'movies:movie_language' 'hebrew' %}">Hebrew</a></li>
+                            <li><a href="{% url 'movies:movie_language' 'spanish' %}">Español</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="mostwatched.html">Most Watched</a></li>
+                    <li class="mobsearch">
+                        <form class="mobform" method="GET">
+                            <input type="text" name="query" value="{{self.GET.q}}" class="mobsearchfield" placeholder="Search...">
+                            <input type="submit" value="" class="mobsearchsubmit">
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+            <form class="search" method="GET" action="{% url 'movies:movie_search' %}">
+                <input type="text" name="query" value="{{self.GET.q}}" class="searchfield" placeholder="Search...">
+                <input type="submit" value="" class="searchsubmit">
+            </form>
+
+            <div class="toggle"><img src="img/menu.svg"></div>
+        </header>
+        <!-- Swiper -->
+        <div class="homeslider">
+            <div class="swiper-container">
+
+                <div class="swiper-wrapper">
+
+                        <div class="swiper-slide">
+                            {% if slider_movie.banner %}
+                                <img src="{{slider_movie.banner.url}}">
+                            {% endif %}
+                            <div class="caption">
+                                <div class="captioninside">
+                                    <h3>{{slider_movie.title}}</h3>
+                                    <p>{{slider_movie.description}}</p>
+                                    <a href="{% url 'movies:movie_detail' slider_movie.slug %}" class="playbutton">Play</a>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        {% block body %}
+        
+        {% endblock body %}
+        
+
+        <footer class='footer'>
+            <div class="copyright"><p>Copyright &copy 2022 7731-2 Python Full Stack Class</p></div>
+            <div class="footermenu">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="terms.html">Terms and conditions</a></li>
+                </ul>
+            </div>
+</body>
+</html>

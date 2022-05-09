@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+    <main class="content">
+        <section class="panel">
+            <h2>Recently Added</h2>
+            <div class="recentslider">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        {% for movie in recently_added %}
+                            <div class="swiper-slide"><a href=""><img src="{{movie.image.url}}"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                        {% endfor %}
+                        <div class="swiper-slide"><a href="mostwatched.html"><img src="img/others.png"></a></div>
+                    </div>
+
+                    <div class="nextdirection recent-next"><img src="img/right-arrow.svg"></div>
+                    <div class="leftdirection recent-prev"><img src="img/left-arrow.svg"></div>
+                </div>
+            </div>
+        </section>
+        <section class="panel">
+            <h2>Most Watched</h2>
+            <div class="recentslider">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        {% for movie in most_watched %}
+                            <div class="swiper-slide"><a href=""><img src="{{movie.image.url}}"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="nextdirection recent-next"><img src="img/right-arrow.svg"></div>
+                    <div class="leftdirection recent-prev"><img src="img/left-arrow.svg"></div>
+                </div>
+            </div>
+        </section>
+        <section class="panel">
+            <h2>Top Rated</h2>
+            <div class="recentslider">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        {% for movie in top_rated %}
+                            <div class="swiper-slide"><a href=""><img src="{{movie.image.url}}"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="nextdirection recent-next"><img src="img/right-arrow.svg"></div>
+                    <div class="leftdirection recent-prev"><img src="img/left-arrow.svg"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+{% endblock body %}
