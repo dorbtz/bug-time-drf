@@ -19,9 +19,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import UserSerializer, MovieSerializer, UserProfileSerializer, CommentSerializer, RatingSerializer, \
-    MovieCastSerializer, CommentTESTSerializer, RateMovieSerializer, CommentSerializers, CreateCommentSerializer, \
+    CommentTESTSerializer, RateMovieSerializer, CommentSerializers, CreateCommentSerializer, \
     CreateRatingSerializer
-from ..models import Movie, UserProfile, Rating, Comment, Person, MovieLink, MovieCast, MovieComment
+from ..models import Movie, UserProfile, Rating, Comment, MovieLink, MovieComment
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 
@@ -108,37 +108,37 @@ class MovieDetails(DetailView):
 
 # Get Methods
 # @login_required
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-def movie_cast(request, pk=None):
-    method = request.method
-    try:
-        casts = MovieCast.objects.all().order_by('movie', 'person')
-    except MovieCast.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if pk is not None:
-        cast = MovieCast.objects.get(pk=pk)
-        serializer = MovieCastSerializer(cast, many=True)
-        return Response(serializer.data)
-
-    if method == 'GET':
-        cast_filter = casts
-
-        if 'person' in request.GET and request.GET['person']:
-            cast_filter = cast_filter.filter(Q(slug=request.GET['person']))
-            serializer = MovieCastSerializer(cast_filter, many=True)
-            console.log(serializer)
-            return Response(serializer.data)
-
-        if 'movie' in request.GET and request.GET['movie']:
-            cast_filter = cast_filter.filter(Q(category=request.GET['movie']))
-            serializer = MovieCastSerializer(cast_filter, many=True)
-            console.log(serializer)
-            return Response(serializer.data)
-        else:
-            serializer = MovieCastSerializer(cast_filter, many=True)
-            return Response(serializer.data)
+# @api_view(['GET'])
+# @authentication_classes([TokenAuthentication])
+# def movie_cast(request, pk=None):
+#     method = request.method
+#     try:
+#         casts = MovieCast.objects.all().order_by('movie', 'person')
+#     except MovieCast.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+#
+#     if pk is not None:
+#         cast = MovieCast.objects.get(pk=pk)
+#         serializer = MovieCastSerializer(cast, many=True)
+#         return Response(serializer.data)
+#
+#     if method == 'GET':
+#         cast_filter = casts
+#
+#         if 'person' in request.GET and request.GET['person']:
+#             cast_filter = cast_filter.filter(Q(slug=request.GET['person']))
+#             serializer = MovieCastSerializer(cast_filter, many=True)
+#             console.log(serializer)
+#             return Response(serializer.data)
+#
+#         if 'movie' in request.GET and request.GET['movie']:
+#             cast_filter = cast_filter.filter(Q(category=request.GET['movie']))
+#             serializer = MovieCastSerializer(cast_filter, many=True)
+#             console.log(serializer)
+#             return Response(serializer.data)
+#         else:
+#             serializer = MovieCastSerializer(cast_filter, many=True)
+#             return Response(serializer.data)
 
 
 class MovieAPIView(APIView):
