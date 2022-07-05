@@ -7,7 +7,7 @@ from rest_framework.authtoken import views
 urlpatterns = [
     # path('', HomesView.as_view()),
     path('admin/', admin.site.urls),
-    path('movieslists/', include('movie.urls', namespace='movies')),
+    # path('movieslists/', include('movie.urls', namespace='movies')),
 
     # REST FRAMEWORK URLS
     path('', include('movie.api.urls')),
