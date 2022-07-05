@@ -115,7 +115,7 @@ WSGI_APPLICATION = 'Mymoviesite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'movie_tracker5',
+        'NAME': 'movie_tracker6',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',

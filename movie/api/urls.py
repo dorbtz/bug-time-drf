@@ -16,7 +16,7 @@ urlpatterns = [
     # path('', include(router.urls)),
     # path('movies/', views.movie_list),
     # path('movies/<int:pk>/delete', views.delete_movie),
-    # path('movies/add', views.add_movie, name='add_movie'),
+    path('movies/add', views.add_movie, name='add_movie'),
     # path('movies/<int:pk>/', views.movie_list),
     # path('movies/<int:pk>/edit', views.edit_movie),
     path('token/', obtain_auth_token),
@@ -24,25 +24,31 @@ urlpatterns = [
     path('register/', views.register),
     path("users/current/", views.current_user),
     path("user_profile/current", views.user_profile),
-    path("cast", views.movie_cast),
-    path("cast/<int:pk>", views.movie_cast),
+    # path("cast", views.movie_cast),
+    # path("cast/<int:pk>", views.movie_cast),
 
     path("rating_detail/<int:pk>/", views.rating_detail),
-    path("rating/<int:pk>/", views.rate_movie),
+    # path("rate_movie/<int:pk>/", views.rate_movie),
     path("movies/<int:pk>/", views.MovieDetailsView.as_view()),
+    # path("movies/<int:pk>/comments", views.CommentsView.as_view()),
     path("movies/", views.MovieAPIView.as_view()),
 
 
-    path("comments/", views.comments_list),
-    path("comments/<str:slug>", views.comments_detail),
+    # path("comments/", views.comments_list),
+    # path("comments/<slug:slug>/", views.comments_detail),
 
     #Search
-    path('search/', MovieSearch.as_view(), name='movie_search'),
+    path('movies/?search=', MovieAPIView.as_view(), name='search'),
+
+    path('comment/', CreateMovieComment.as_view(), name='create_comment'),
+    path('all_comments/<int:id>/', CommentAPIView.as_view(), name='all_comments'),
+
+    path('rate/', CreateRating.as_view(), name='rate_movie'),
 
     # api
-    path("api/moviedetails/<str:pk>", MovieDetails.as_view()),
-    path("api/movielist", MovieList.as_view()),
-    path("api/search", MovieSearch.as_view()),
+    # path("api/moviedetails/<str:pk>", MovieDetails.as_view()),
+    # path("api/movielist", MovieList.as_view()),
+    # path("api/search", MovieSearch.as_view()),
 
 
 

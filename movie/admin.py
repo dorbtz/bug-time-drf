@@ -10,9 +10,7 @@ from .models import *
 # admin.site.register(Activity)
 admin.site.register(UserProfile)
 admin.site.register(Rating)
-admin.site.register(History)
-admin.site.register(WatchList)
-admin.site.register(BlockList)
+admin.site.register(MovieComment)
 
 TokenAdmin.raw_id_fields = ['user']
 
@@ -38,8 +36,8 @@ class PersonModel(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentModel(admin.ModelAdmin):
     list_filter = ['active', 'created_at']
-    list_display = ('user', 'comment', 'movie', 'created_at', 'active')
-    search_fields = ('user', 'comment')
+    list_display = ('user', 'content', 'movie', 'created_at', 'active')
+    search_fields = ('user', 'content')
     actions = ['approve_comments']
 
     @staticmethod
@@ -47,13 +45,13 @@ class CommentModel(admin.ModelAdmin):
         queryset.update(active=True)
 
 
-@admin.register(Activity)
-class CommentModel(admin.ModelAdmin):
-    list_filter = ['action', 'movie']
-    list_display = ('user', 'movie', 'action')
-
-
-@admin.register(MovieCast)
-class CommentModel(admin.ModelAdmin):
-    list_filter = ['person', 'movie']
-    list_display = ('person', 'movie')
+# @admin.register(Activity)
+# class CommentModel(admin.ModelAdmin):
+#     list_filter = ['action', 'movie']
+#     list_display = ('user', 'movie', 'action')
+#
+#
+# @admin.register(MovieCast)
+# class CommentModel(admin.ModelAdmin):
+#     list_filter = ['person', 'movie']
+#     list_display = ('person', 'movie')

@@ -82,13 +82,15 @@ class Person(models.Model):
 class Movie(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=1000, null=True)
-    image = models.ImageField(default='movies/poster-not-available.jpg', blank=True, null=True)
-    banner = models.ImageField(default='banners/no-banner-available.jpg', blank=True, null=True)
-    category = MultiSelectField(choices=CATEGORY_CHOICES, max_choices=4, blank=True)
+    image = models.ImageField(upload_to='../media/movies/', default='../media/movies/poster-not-available.jpg', blank=True, null=True)
+    banner = models.ImageField(upload_to='../media/banners/', default='../media/banners/no-banner-available.jpg', blank=True, null=True)
+    # category = MultiSelectField(choices=CATEGORY_CHOICES, max_choices=4, blank=True, null=True)
+    category = models.CharField(max_length=22, blank=True, null=True, choices=CATEGORY_CHOICES)
     language = models.CharField(choices=LANGUAGE_CHOICES, max_length=20, blank=True)
     status = models.CharField(choices=STATUS_CHOICES, max_length=20, blank=True)
     director = models.CharField(max_length=100, null=True, blank=True)
-    cast = models.ManyToManyField(Person, through='MovieCast', related_name='movies', blank=True)
+    # cast = models.ManyToManyField(Person, through='MovieCast', related_name='movies', blank=True)
+    cast = models.CharField(max_length=1000, null=True, blank=True)
     year_of_production = models.DateField()
     views_count = models.IntegerField(default=0, blank=True, null=True)
     movie_trailer = models.URLField(blank=True)
@@ -97,15 +99,15 @@ class Movie(models.Model):
 
     slug = models.SlugField(blank=True, null=True)
 
-    def banners(self, *args, **kwargs):
-        if self.banner == 'null':
-            self.banner = 'banners/no-banner-available.jpg'
-        super(Movie, self).save(*args, **kwargs)
-
-    def images(self, *args, **kwargs):
-        if self.image == 'null':
-            self.image = 'movies/poster-not-available.jpg'
-        super(Movie, self).save(*args, **kwargs)
+    # def banners(self, *args, **kwargs):
+    #     if self.banner == 'null':
+    #         self.banner = 'banners/no-banner-available.jpg'
+    #     super(Movie, self).save(*args, **kwargs)
+    #
+    # def images(self, *args, **kwargs):
+    #     if self.image == 'null':
+    #         self.image = 'movies/poster-not-available.jpg'
+    #     super(Movie, self).save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -154,87 +156,97 @@ class Rating(models.Model):
         (1, "sucks!"),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, null=True)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(choices=RATE_CHOICES)
 
     def __str__(self):
         return f"{self.rating}"
 
 
-class History(models.Model):
-    user = models.ForeignKey(User, related_name='history', on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    created = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        unique_together = (("user", "movie"),)
-
-    def __str__(self):
-        return f"{self.movie}"
-
-
-class WatchList(models.Model):
-    user = models.ForeignKey(User, related_name='watchlist', on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    important = models.BooleanField(default=False)
-    created = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        unique_together = (("user", "movie"),)
-
-    def __str__(self):
-        return f"{self.movie}"
-
-
-class BlockList(models.Model):
-    user = models.ForeignKey(User, related_name='blocklist', on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    created = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        unique_together = (("user", "movie"),)
-
-    def __str__(self):
-        return f"{self.user}, {self.movie}"
-
-
-class Activity(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    action = models.CharField(max_length=128)
-    created = models.DateTimeField(default=timezone.now)
-
-    @classmethod
-    def add(cls, user, movie, action, created=None):
-        a = timezone.now()
-        if created:
-            a = created
-
-        Activity(
-            user=user,
-            movie=movie,
-            action=action,
-            created=a,
-        ).save()
-
-    def __str__(self):
-        return f"{self.user}"
+# class History(models.Model):
+#     user = models.ForeignKey(User, related_name='history', on_delete=models.CASCADE)
+#     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+#     created = models.DateTimeField(default=timezone.now)
+#
+#     class Meta:
+#         unique_together = (("user", "movie"),)
+#
+#     def __str__(self):
+#         return f"{self.movie}"
+#
+#
+# class WatchList(models.Model):
+#     user = models.ForeignKey(User, related_name='watchlist', on_delete=models.CASCADE)
+#     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+#     important = models.BooleanField(default=False)
+#     created = models.DateTimeField(default=timezone.now)
+#
+#     class Meta:
+#         unique_together = (("user", "movie"),)
+#
+#     def __str__(self):
+#         return f"{self.movie}"
+#
+#
+# class BlockList(models.Model):
+#     user = models.ForeignKey(User, related_name='blocklist', on_delete=models.CASCADE)
+#     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+#     created = models.DateTimeField(default=timezone.now)
+#
+#     class Meta:
+#         unique_together = (("user", "movie"),)
+#
+#     def __str__(self):
+#         return f"{self.user}, {self.movie}"
+#
+#
+# class Activity(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+#     action = models.CharField(max_length=128)
+#     created = models.DateTimeField(default=timezone.now)
+#
+#     @classmethod
+#     def add(cls, user, movie, action, created=None):
+#         a = timezone.now()
+#         if created:
+#             a = created
+#
+#         Activity(
+#             user=user,
+#             movie=movie,
+#             action=action,
+#             created=a,
+#         ).save()
+#
+#     def __str__(self):
+#         return f"{self.user}"
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, related_name='movie_comments', on_delete=models.CASCADE)
-    comment = models.TextField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_comment', blank=True, null=True)
+    movie = models.ForeignKey(Movie, related_name='movie_comments', on_delete=models.CASCADE, null=True, blank=True)
+    content = models.TextField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
-    active = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
         unique_together = (("user", "movie"),)
 
     def __str__(self):
-        return 'Comment {} by {}'.format(self.comment, self.user)
+        return self.content
+
+    def children(self):
+        return Comment.objects.filter(parent=self)
+
+    @property
+    def is_parent(self):
+        if self.parent is not None:
+            return False
+        return True
 
 
 class MovieCast(models.Model):
@@ -255,7 +267,7 @@ class UserProfile(models.Model):
     city = models.CharField(null=True, blank=True, max_length=128)
     address = models.CharField(null=True, blank=True, max_length=128)
     # country = CountryField()
-    favorite_category = MultiSelectField(choices=CATEGORY_CHOICES, null=True, blank=True)
+    favorite_category = models.CharField(max_length=128, blank=True, null=True, choices=CATEGORY_CHOICES)
     favorite_movie = models.ForeignKey(Movie, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
@@ -268,3 +280,13 @@ class UserProfile(models.Model):
 # def create_auth_token(sender, instance=None, created=False, **kwargs):
 #     if created:
 #         Token.objects.create(user=instance)
+
+
+class MovieComment(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="movie")
+    content = models.TextField(blank=False, null=False, max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"from {self.sender} to {self.movie}"
